@@ -34,33 +34,34 @@ func Server() {
 		defer func() {
 			c.Close()
 		}()
+
 		go func() {
 			for {
 				mt, msg, err := c.ReadMessage()
 				if err != nil {
 					fmt.Println("error read: ", err)
-					break
 				}
-				log.Printf("recv: %s (type: %v)", msg, mt)
+				log.Printf("recv: %s (type: %v)\n", msg, mt)
 			}
 		}()
 
+		scanner := bufio.NewScanner(os.Stdin)
+		sendMessage := ""
+		fmt.Println("connected.")
 		for {
-			sendMessage := ""
-			_, err := fmt.Scanf("%q", &sendMessage)
+			scanner.Scan()
+			sendMessage = scanner.Text()
+			err := scanner.Err()
 			if err != nil {
 				fmt.Println("error while scanning message: ", err)
 				stdin.ReadString('\n')
 			}
-			fmt.Printf("send: %s", sendMessage)
+			fmt.Printf("send: %s\n", sendMessage)
 			if err = c.WriteMessage(1, []byte(sendMessage)); err != nil {
-				fmt.Println("err while sending message: ", err)
-				break
+				fmt.Println("err while sending message: ", err, '\n')
+				stdin.ReadString('\n')
 			}
-
 		}
-
 	}))
-
 	app.Listen(":8080")
 }
