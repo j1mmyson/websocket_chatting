@@ -27,9 +27,13 @@ window.onload = function () {
         }
         conn.send(msg.value);
 
+        var box = document.createElement("div");
+        box.id = "box";
         var item = document.createElement("div");
+        item.id = "send";
         item.innerText = msg.value;
-        appendLog(item);
+        box.appendChild(item);
+        appendLog(box);
 
         msg.value = "";
         return false;
@@ -46,9 +50,14 @@ window.onload = function () {
             console.log("receive message: ", evt.data);
             var messages = evt.data.split('\n');
             for (var i = 0; i < messages.length; i++) {
+                var box = document.createElement("div");
+                box.id = "box";
                 var item = document.createElement("div");
+                item.id = "received";
                 item.innerText = messages[i];
-                appendLog(item);
+                box.appendChild(item);
+                // appendLog(item);
+                appendLog(box);
             }
         };
     } else {
@@ -73,7 +82,7 @@ body {
 }
 
 #log {
-    background: white;
+    background:rgb(36, 34, 34);
     margin: 0;
     padding: 0.5em 0.5em 0.5em 0.5em;
     position: absolute;
@@ -82,6 +91,8 @@ body {
     right: 0.5em;
     bottom: 3em;
     overflow: auto;
+    display: flex;
+    flex-direction: column;
 }
 
 #form {
@@ -92,6 +103,34 @@ body {
     left: 0px;
     width: 100%;
     overflow: hidden;
+}
+
+#send {
+    float: right;
+    max-width: 30%;
+    margin: 5px;
+    padding: 5px;
+    text-align: end;
+	position: relative;
+	background: #ddd23a;
+	border-radius: .4em;
+}
+
+#box {
+    height: fit-content;
+    width: 100%;
+}
+
+#received {
+    float: left;
+    max-width: 30%;
+    margin: 5px;
+    padding: 5px;
+    text-align: start;
+	position: relative;
+	background: #393d3d;
+    color: blanchedalmond;
+	border-radius: .4em;
 }
 
 </style>
